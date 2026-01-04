@@ -8,8 +8,12 @@ Permite aproximar integrales dobles y triples sobre regiones estándar utilizand
 4. Análisis de Error: Cálculo automático del error relativo entre el método numérico y el valor exacto.
   
 📐 Fundamento Matemático
-La calculadora resuelve aproximaciones mediante la partición del volumen/área en $n^k$ subelementos. Para asegurar la precisión, el software aplica el Teorema del Cambio de Variable:$$\iiint_V f(x,y,z) dV = \iiint_{V^*} f(g(u,v,w)) \cdot |J(u,v,w)| \, du \, dv \, dw$$
+La calculadora resuelve aproximaciones mediante la partición del volumen/área en $n^k$ subelementos. Para asegurar la precisión, el software aplica el Teorema del Cambio de Variable:
+
+$$\iiint_V f(x,y,z) dV = \iiint_{V^*} f(g(u,v,w)) \cdot |J(u,v,w)| \, du \, dv \, dw$$
+
 Donde $|J|$ es el determinante del Jacobiano correspondiente: 
+
 Polares/Cilíndricas: $|J| = r$
 Esféricas: $|J| = \rho^2 \sin(\phi)$
 
