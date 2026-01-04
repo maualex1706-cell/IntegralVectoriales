@@ -40,79 +40,17 @@ Integral triple
 
 Se calcula la integral de la función:
 
-𝑓
-(
-𝑥
-,
-𝑦
-,
-𝑧
-)
-=
-𝑥
-2
-+
-𝑦
-2
-+
-𝑧
-2
-f(x,y,z)=x
-2
-+y
-2
-+z
-2
+𝑓 (𝑥 , 𝑦 , 𝑧) = 𝑥^2 + y^2 + z^2
 
 en el volumen:
 
-𝑉
-=
-{
-−
-1
-≤
-𝑥
-,
-𝑦
-,
-𝑧
-≤
-1
-}
-V={−1≤x,y,z≤1}
+𝑉 = { −1 ≤ 𝑥 , 𝑦 , 𝑧 ≤ 1}
 
 Valor teórico:
 
-∭
-𝑉
-(
-𝑥
-2
-+
-𝑦
-2
-+
-𝑧
-2
-)
- 
-𝑑
-𝑉
-=
-8
-∭
-V
+∭𝑉(𝑥^2 + y^2 + z^2)𝑑𝑉 = 8
 	​
-
-(x
-2
-+y
-2
-+z
-2
-)dV=8
-🖥️ Tecnologías utilizadas
+🖥️ Lenguajes utilizados
 
 HTML5 – Estructura del proyecto
 
@@ -124,45 +62,39 @@ Plotly.js – Gráficas 2D, 3D y visualización de vectores
 
 📊 Funcionalidades principales
 
-Selección entre integral doble o integral triple
-
-Configuración del número de particiones
+1. Selección entre integral doble o integral triple
+2. Configuración del número de particiones
 
 Cálculo automático de:
 
-Valor aproximado
-
-Valor teórico
-
-Error relativo
+✦Valor aproximado
+✦Valor teórico
+✦Error relativo
 
 Visualización gráfica de:
 
-Región de integración
-
-Vectores representados con flechas
-
-Despliegue de la fórmula matemática utilizada
+✰Región de integración
+✰Vectores representados con flechas
+✰Despliegue de la fórmula matemática utilizada
 
 🧭 Visualización vectorial
 
-En 2D se muestran vectores en el plano que representan la dirección del campo.
-
-En 3D se utilizan flechas espaciales (cone) para mostrar vectores en el volumen.
+✥En 2D se muestran vectores en el plano que representan la dirección del campo.
+✥En 3D se utilizan flechas espaciales (cone) para mostrar vectores en el volumen.
 
 Esto refuerza la relación entre integrales múltiples y análisis vectorial.
 
 ▶️ Cómo ejecutar el proyecto
 
-Copia el archivo HTML del proyecto.
+1. Copia el archivo HTML del proyecto.
 
-Ábrelo con cualquier navegador moderno (Chrome, Edge, Firefox).
+2. Ábrelo con cualquier navegador moderno (Chrome, Edge, Firefox).
 
-Selecciona el tipo de integral.
+3. Selecciona el tipo de integral.
 
-Ajusta el número de particiones.
+4. Ajusta el número de particiones.
 
-Presiona “Calcular integral”.
+5. Presiona “Calcular integral”.
 
 No requiere instalación ni compilación adicional.
 
@@ -178,13 +110,15 @@ A mayor número de particiones, menor error relativo.
 
 Correspondencia clara entre:
 
-Resultado numérico
+✲Resultado numérico
+✲Fórmula teórica
+✲Representación gráfica
 
-Fórmula teórica
+👨‍🎓 Autores
 
-Representación gráfica
-
-👨‍🎓 Autor
+Meza Santos Jose Enrique
+Ocampo Crisostomo Alejandro Neftali
+Sánchez Ponce Mauricio Alejandro
 
 Proyecto académico desarrollado con fines educativos para la materia de Análisis Vectorial.
 
