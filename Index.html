@@ -2,101 +2,103 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Calculadora de Analisis Vectorial</title>
+  <title>Calculadora de Analisis Vectorial Pro</title>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
     body {
-	font-family: 'Segoe UI', sans-serif; 
-	background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
-	color: #fff; 
-	margin: 0; 
-	padding: 20px; 
-	}
-    h1 { 
-	text-align: center;
-	margin-bottom: 5px; 
-	}
-    .container { 
-	display: flex;
-	gap: 20px;
-	flex-wrap: wrap; 
-	justify-content: center; 
-	}
-    .panel { 
-	background: rgba(255,255,255,0.1);
-	padding: 20px; 
-	border-radius: 15px; 
-	flex: 1; 
-	min-width: 350px; 
-	max-width: 500px; 
-	box-shadow: 0 0 15px rgba(0,0,0,0.4); 
-	}
-    select, input { 
-	width: 100%;
-	padding: 10px; 
-	margin: 8px 0; 
-	border-radius: 8px; 
-	border: none; 
-	}
-    button { 
-	width: 100%; 
-	margin-top: 15px; 
-	padding: 12px; 
-	border: none; 
-	border-radius: 12px; 
-	font-weight: bold; 
-	background: linear-gradient(45deg, #00c6ff, #0072ff); 
-	color: white; 
-	cursor: pointer; 
-	transition: 0.3s; 
-	}
-    button:hover { 
-	transform: scale(1.02); 
-	}
-    .result-item { 
-	background: rgba(0,0,0,0.3); 
-	padding: 12px; 
-	margin-top: 8px; 
-	border-radius: 8px; 
-	border-left: 4px solid #00c6ff; 
-	}
-    .formula-box { 
-	background: rgba(255,255,255,0.08);
-	padding: 15px; 
-	margin-top: 15px; 
-	border-radius: 10px; 
-	font-family: 'Courier New', monospace; font-size: 14px; 
-	line-height: 1.5;
-	}
-    #graph { 
-	width: 100%; 
-	height: 450px; 
-	border-radius: 10px; 
-	margin-top: 10px; 
-	}
-    .highlight { 
-	color: #4ade80; 
-	font-weight: bold; 
-	}
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+      color: #e0e0e0;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    h1 { text-align: center; font-weight: 300; letter-spacing: 2px; margin-bottom: 10px; color: #fff; }
+    p.subtitle { text-align: center; opacity: 0.7; margin-bottom: 40px; }
+    
+    .container { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 1200px; margin: 0 auto; }
+    
+    .panel {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 20px;
+      flex: 1;
+      min-width: 400px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    h3 { margin-top: 0; color: #00c6ff; font-weight: 400; display: flex; align-items: center; gap: 10px; }
+    
+    label { display: block; margin-top: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+    
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      color: #fff;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: linear-gradient(45deg, #0072ff, #00c6ff);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.5); }
+
+    .result-item {
+      background: rgba(255,255,255,0.03);
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 12px;
+      border-left: 5px solid #00c6ff;
+    }
+    
+    .formula-box {
+      font-family: 'Consolas', monospace;
+      font-size: 0.9rem;
+      color: #4ade80;
+      margin-top: 20px;
+      background: rgba(0,0,0,0.2);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    #graph { width: 100%; height: 500px; }
+    .highlight { color: #4ade80; font-weight: 600; font-size: 1.1rem; }
   </style>
 </head>
 <body>
 
 <h1>Calculadora de Integrales Vectoriales</h1>
-<p style="text-align:center">Proyecto: Aproximacion Numerica con Jacobianos</p>
+<p class="subtitle">Aproximacion Numerica vs Valor Teorico (Visualizacion de Campos)</p>
 
 <div class="container">
   <div class="panel">
-    <h3>Configuracion</h3>
+    <h3> Configuracion</h3>
     
-    <label>Seleccionar Funcion</label>
+    <label>Funcion f(x, y, z)</label>
     <select id="funcId">
-      <option value="f1">Potencial Cuadratico (Suma de cuadrados)</option>
-      <option value="f2">Campo Lineal (Plano inclinado)</option>
-      <option value="f3">Calculo de Masa Unitaria (Densidad constante)</option>
+      <option value="f1">Potencial Cuadratico (x² + y² + z²)</option>
+      <option value="f2">Campo Lineal (x + y + z)</option>
+      <option value="f3">Masa/Volumen Unitario (1)</option>
     </select>
 
-    <label>Sistema de Coordenadas y Region</label>
+    <label>Region de Integracion</label>
     <select id="sistema">
       <option value="rect">Doble: Region Rectangular</option>
       <option value="disco">Doble: Region Circular (Disco)</option>
@@ -105,38 +107,31 @@
       <option value="cilindro">Triple: Region Cilindrica</option>
     </select>
 
-    <label>Particiones por eje (n)</label>
-    <input type="number" id="n" value="0" min="0" max="100" placeholder="Ej: 30">
+    <label>Resolucion de Malla (Particiones)</label>
+    <input type="number" id="n" value="25" min="5" max="50">
 
-    <button onclick="ejecutar()">CALCULAR INTEGRAL</button>
+    <button onclick="ejecutar()">Generar e Integrar</button>
 
     <div id="resultado"></div>
   </div>
 
   <div class="panel">
-    <h3>Visualizacion de la Región</h3>
+    <h3>Visualizacion de Campo Vectorial</h3>
     <div id="graph"></div>
   </div>
 </div>
 
 <script>
-// --- CATALOGO DE FUNCIONES ---
 const funciones = {
     f1: (x, y, z = 0) => x*x + y*y + z*z,
     f2: (x, y, z = 0) => x + y + z,
     f3: (x, y, z = 0) => 1
 };
 
-// --- VALORES TEORICOS (Para f1: x²+y²+z²) ---
-// Nota: En un proyecto real, esto se calcularía simbólicamente o con fórmulas fijas
 function getExacto(sistema, funcId) {
-    if (funcId !== 'f1') return null; // Solo daremos exacto para f1 en este ejemplo
+    if (funcId !== 'f1') return null;
     const exactos = {
-        'rect': 8/3,      // Integral doble x²+y² en [-1,1]²
-        'disco': Math.PI/2, 
-        'caja': 8.0,      // Integral triple x²+y²+z² en caja [-1,1]³
-        'esfera': (4/5) * Math.PI,
-        'cilindro': 3 * Math.PI
+        'rect': 8/3, 'disco': Math.PI/2, 'caja': 8.0, 'esfera': (4/5) * Math.PI, 'cilindro': 3 * Math.PI
     };
     return exactos[sistema];
 }
@@ -148,36 +143,36 @@ function ejecutar() {
     const n = parseInt(document.getElementById("n").value);
     
     let aprox = 0;
-    let puntos = { x: [], y: [], z: [], c: [] };
-    const d = 1/n;
+    // Datos para los vectores (Conos)
+    let vData = { x: [], y: [], z: [], u: [], v: [], w: [] };
+    const step = Math.max(1, Math.floor(n/10)); // Densidad de flechas para no saturar el grafico
 
-    // --- LOGICA DE INTEGRACION ---
+    // --- LÓGICA DE INTEGRACION ---
     if (sistema === "rect" || sistema === "disco") {
-        const lim = (sistema === "rect") ? {r1: -1, r2: 1, t1: -1, t2: 1} : {r1: 0, r2: 1, t1: 0, t2: 2*Math.PI};
-        const dr = (lim.r2 - lim.r1)/n;
-        const dt = (lim.t2 - lim.t1)/n;
+        const dr = (sistema === "rect" ? 2 : 1) / n;
+        const dt = (sistema === "rect" ? 2 : 2*Math.PI) / n;
 
         for(let i=0; i<n; i++) {
             for(let j=0; j<n; j++) {
-                const u = lim.r1 + (i + 0.5) * dr;
-                const v = lim.t1 + (j + 0.5) * dt;
-                let x, y, jacobiano;
+                const r = (sistema === "rect" ? -1 : 0) + (i + 0.5) * dr;
+                const t = (sistema === "rect" ? -1 : 0) + (j + 0.5) * dt;
+                let x, y, J;
 
-                if (sistema === "rect") {
-                    x = u; y = v; jacobiano = 1;
-                } else {
-                    x = u * Math.cos(v); y = u * Math.sin(v); jacobiano = u; // Jacobiano Polar
-                }
+                if (sistema === "rect") { x = r; y = t; J = 1; }
+                else { x = r * Math.cos(t); y = r * Math.sin(t); J = r; }
 
                 const val = f(x, y);
-                aprox += val * jacobiano;
-                if (i%2==0 && j%2==0) { puntos.x.push(x); puntos.y.push(y); puntos.z.push(val); puntos.c.push(val); }
+                aprox += val * J;
+
+                // Guardar datos para flechas (muestreo ralo para estetica)
+                if (i % step === 0 && j % step === 0) {
+                    vData.x.push(x); vData.y.push(y); vData.z.push(0);
+                    vData.u.push(x * 0.2); vData.v.push(y * 0.2); vData.w.push(val * 0.2);
+                }
             }
         }
         aprox *= (dr * dt);
-    } 
-    else {
-        // TRIPLE
+    } else {
         let dr, dt, dp;
         if (sistema === "caja") { dr=2/n; dt=2/n; dp=2/n; }
         else if (sistema === "esfera") { dr=1/n; dt=2*Math.PI/n; dp=Math.PI/n; }
@@ -186,32 +181,33 @@ function ejecutar() {
         for(let i=0; i<n; i++) {
             for(let j=0; j<n; j++) {
                 for(let k=0; k<n; k++) {
-                    const u = (sistema === "caja" ? -1 : 0) + (i+0.5)*dr;
-                    const v = (j+0.5)*dt;
-                    const w = (sistema === "cilindro" ? -1 : 0) + (k+0.5)*dp;
+                    const r = (sistema === "caja" ? -1 : 0) + (i+0.5)*dr;
+                    const t = (j+0.5)*dt;
+                    const p = (sistema === "cilindro" ? -1 : 0) + (k+0.5)*dp;
                     let x, y, z, J;
 
-                    if(sistema === "caja") { x=u; y=v-1; z=w; J=1; }
+                    if(sistema === "caja") { x=r; y=t-1; z=p; J=1; }
                     else if(sistema === "esfera") {
-                        x = u*Math.sin(w)*Math.cos(v); y=u*Math.sin(w)*Math.sin(v); z=u*Math.cos(w);
-                        J = u*u*Math.sin(w); // Jacobiano Esferico
+                        x = r*Math.sin(p)*Math.cos(t); y=r*Math.sin(p)*Math.sin(t); z=r*Math.cos(p);
+                        J = r*r*Math.sin(p);
                     }
-                    else {
-                        x = u*Math.cos(v); y=u*Math.sin(v); z=w; J=u; // Jacobiano Cilindrico
-                    }
+                    else { x = r*Math.cos(t); y=r*Math.sin(t); z=p; J=r; }
                     
                     const val = f(x, y, z);
                     aprox += val * J;
-                    if(i%4==0 && j%4==0 && k%4==0) { puntos.x.push(x); puntos.y.push(y); puntos.z.push(z); puntos.c.push(val); }
+
+                    if(i % (step*2) === 0 && j % (step*2) === 0 && k % (step*2) === 0) {
+                        vData.x.push(x); vData.y.push(y); vData.z.push(z);
+                        vData.u.push(x*0.3); vData.v.push(y*0.3); vData.w.push(z*0.3);
+                    }
                 }
             }
         }
         aprox *= (dr * dt * dp);
     }
 
-    const exacto = getExacto(sistema, funcId);
-    mostrarResultados(aprox, exacto, sistema);
-    plotRegion(puntos, sistema.includes('rect') || sistema.includes('disco') ? '2d' : '3d');
+    mostrarResultados(aprox, getExacto(sistema, funcId), sistema);
+    plotVectorField(vData);
 }
 
 function mostrarResultados(aprox, exacto, sistema) {
@@ -221,37 +217,44 @@ function mostrarResultados(aprox, exacto, sistema) {
         errorHTML = `<div class="result-item">Valor Teorico: <span class="highlight">${exacto.toFixed(4)}</span></div>
                      <div class="result-item">Error Relativo: <span class="highlight">${(error * 100).toFixed(4)}%</span></div>`;
     }
-
     document.getElementById("resultado").innerHTML = `
         <div class="result-item">Aproximacion Numerica: <span class="highlight">${aprox.toFixed(6)}</span></div>
         ${errorHTML}
-        <div class="formula-box">
-            <strong>Diferencial utilizado:</strong><br>
-            ${getFormula(sistema)}
-        </div>
-    `;
+        <div class="formula-box"><strong>Diferencial:</strong> ${getFormula(sistema)}</div>`;
 }
 
 function getFormula(s) {
-    if(s === "rect") return "dA = dx dy";
-    if(s === "disco") return "dA = r dr dθ";
-    if(s === "esfera") return "dV = ρ² sin(φ) dρ dθ dφ";
-    if(s === "cilindro") return "dV = r dz dr dθ";
-    return "dV = dx dy dz";
+    const f = { rect: "dx dy", disco: "r dr dθ", esfera: "ρ² sin(φ) dρ dθ dφ", cilindro: "r dz dr dθ", caja: "dx dy dz" };
+    return "dV = " + f[s];
 }
 
-function plotRegion(p, mode) {
+function plotVectorField(d) {
     const trace = {
-        x: p.x, y: p.y, z: p.z,
-        mode: 'markers',
-        marker: { size: 3, color: p.c, colorscale: 'Viridis', opacity: 0.8 },
-        type: mode === '2d' ? 'scatter3d' : 'scatter3d'
+        type: 'cone',
+        x: d.x, y: d.y, z: d.z,
+        u: d.u, v: d.v, w: d.w,
+        sizemode: 'scaled',
+        sizeref: 1.5,
+        colorscale: 'Viridis',
+        showscale: false,
+        hoverinfo: 'x+y+z'
     };
-    const layout = { margin: {l:0,r:0,b:0,t:0}, paper_bgcolor: "rgba(0,0,0,0)", scene: { xaxis: {color: "#fff"}, yaxis: {color: "#fff"}, zaxis: {color: "#fff"} } };
+
+    const layout = {
+        scene: {
+            xaxis: { title: 'X', gridcolor: '#444', zerolinecolor: '#fff' },
+            yaxis: { title: 'Y', gridcolor: '#444', zerolinecolor: '#fff' },
+            zaxis: { title: 'Z', gridcolor: '#444', zerolinecolor: '#fff' },
+            bgcolor: 'rgba(0,0,0,0)'
+        },
+        margin: { l: 0, r: 0, b: 0, t: 0 },
+        paper_bgcolor: 'rgba(0,0,0,0)'
+    };
+
     Plotly.newPlot("graph", [trace], layout);
 }
 
-// Inicializar
+// Inicializar con un calculo vacío
 ejecutar();
 </script>
 </body>
