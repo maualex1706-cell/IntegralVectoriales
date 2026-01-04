@@ -75,6 +75,15 @@
       border-radius: 8px;
     }
 
+    .formula-box {
+      background: rgba(255,255,255,0.08);
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+    }
+
     #graph {
       width: 100%;
       height: 420px;
@@ -94,7 +103,6 @@
 
 <div class="container">
 
-  <!-- PANEL DE ENTRADA -->
   <div class="panel">
     <h3>⚙️ Configuración</h3>
 
@@ -112,7 +120,6 @@
     <div id="resultado"></div>
   </div>
 
-  <!-- PANEL DE VISUALIZACIÓN -->
   <div class="panel">
     <h3>📊 Visualización de la región</h3>
     <div id="graph"></div>
@@ -135,6 +142,7 @@
 
     let aproximado = 0;
     let exacto = 0;
+    let formulaHTML = "";
 
     const a = -1;
     const b = 1;
@@ -150,6 +158,13 @@
       }
       aproximado *= d * d;
       exacto = 8 / 3;
+
+      formulaHTML = `
+        f(x, y) = x² + y²<br>
+        ∬<sub>R</sub> (x² + y²) dA<br>
+        R = { -1 ≤ x ≤ 1, -1 ≤ y ≤ 1 }
+      `;
+
       plot2D();
     } else {
       for (let i = 0; i < n; i++) {
@@ -164,6 +179,13 @@
       }
       aproximado *= d * d * d;
       exacto = 8;
+
+      formulaHTML = `
+        f(x, y, z) = x² + y² + z²<br>
+        ∭<sub>V</sub> (x² + y² + z²) dV<br>
+        V = { -1 ≤ x,y,z ≤ 1 }
+      `;
+
       plot3D();
     }
 
@@ -179,47 +201,31 @@
       <div class="result-item">
         Error relativo: <span class="highlight">${error.toFixed(6)}</span>
       </div>
+
+      <div class="formula-box">
+        <strong>📌 Fórmula utilizada:</strong><br><br>
+        ${formulaHTML}
+      </div>
     `;
   }
 
   function plot2D() {
-    const trace = {
+    Plotly.newPlot("graph", [{
       type: "scatter",
       mode: "markers",
       x: [-1,1,1,-1,-1],
-      y: [-1,-1,1,1,-1],
-      marker: { size: 8 }
-    };
-
-    const layout = {
-      xaxis: { title: "x" },
-      yaxis: { title: "y" },
-      margin: { t: 30 }
-    };
-
-    Plotly.newPlot("graph", [trace], layout);
+      y: [-1,-1,1,1,-1]
+    }]);
   }
 
   function plot3D() {
-    const trace = {
+    Plotly.newPlot("graph", [{
       type: "scatter3d",
       mode: "markers",
       x: [-1,1,1,-1,-1],
       y: [-1,-1,1,1,-1],
-      z: [-1,-1,1,1,-1],
-      marker: { size: 3 }
-    };
-
-    const layout = {
-      scene: {
-        xaxis: { title: "x" },
-        yaxis: { title: "y" },
-        zaxis: { title: "z" }
-      },
-      margin: { t: 30 }
-    };
-
-    Plotly.newPlot("graph", [trace], layout);
+      z: [-1,-1,1,1,-1]
+    }]);
   }
 </script>
 
