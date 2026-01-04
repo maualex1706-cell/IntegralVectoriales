@@ -209,22 +209,66 @@
     `;
   }
 
+  /* ---------- 2D CON VECTORES ---------- */
   function plot2D() {
-    Plotly.newPlot("graph", [{
-      type: "scatter",
-      mode: "markers",
-      x: [-1,1,1,-1,-1],
-      y: [-1,-1,1,1,-1]
-    }]);
+    const arrowsX = [];
+    const arrowsY = [];
+    const arrowsU = [];
+    const arrowsV = [];
+
+    for (let x = -1; x <= 1; x += 0.5) {
+      for (let y = -1; y <= 1; y += 0.5) {
+        arrowsX.push(x);
+        arrowsY.push(y);
+        arrowsU.push(x);
+        arrowsV.push(y);
+      }
+    }
+
+    Plotly.newPlot("graph", [
+      {
+        type: "scatter",
+        mode: "lines",
+        x: [-1,1,1,-1,-1],
+        y: [-1,-1,1,1,-1],
+        line: {color: "white"}
+      },
+      {
+        type: "cone",
+        x: arrowsX,
+        y: arrowsY,
+        z: arrowsX.map(() => 0),
+        u: arrowsU,
+        v: arrowsV,
+        w: arrowsX.map(() => 0),
+        sizemode: "absolute",
+        sizeref: 0.6,
+        anchor: "tail",
+        colorscale: "Blues"
+      }
+    ]);
   }
 
+  /* ---------- 3D CON VECTORES ---------- */
   function plot3D() {
+    const x = [], y = [], z = [], u = [], v = [], w = [];
+
+    for (let i = -1; i <= 1; i += 0.7) {
+      for (let j = -1; j <= 1; j += 0.7) {
+        for (let k = -1; k <= 1; k += 0.7) {
+          x.push(i); y.push(j); z.push(k);
+          u.push(i); v.push(j); w.push(k);
+        }
+      }
+    }
+
     Plotly.newPlot("graph", [{
-      type: "scatter3d",
-      mode: "markers",
-      x: [-1,1,1,-1,-1],
-      y: [-1,-1,1,1,-1],
-      z: [-1,-1,1,1,-1]
+      type: "cone",
+      x, y, z, u, v, w,
+      sizemode: "absolute",
+      sizeref: 0.5,
+      anchor: "tail",
+      colorscale: "Viridis"
     }]);
   }
 </script>
