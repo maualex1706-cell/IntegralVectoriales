@@ -1,2 +1,193 @@
-# IntegralVectoriales
-Este proyecto consiste en el desarrollo de una herramienta computacional que permite calcular integrales dobles y triples de funciones matemáticas definidas sobre regiones estándar, utilizando métodos numéricos implementados en lenguaje C, y comparando los resultados obtenidos con un valor teórico exacto calculado mediante Java.
+📐 Calculadora de Integrales Dobles y Triples
+
+Análisis Vectorial – Visualización y Aproximación Numérica
+
+📌 Descripción del proyecto
+
+Este proyecto consiste en una calculadora interactiva de integrales dobles y triples, desarrollada con HTML, CSS y JavaScript, que permite:
+
+1. Calcular integrales mediante aproximación numérica (sumas de Riemann).
+2. Comparar el valor aproximado con el valor teórico exacto.
+3. Visualizar gráficamente la región de integración.
+4. Representar vectores (flechas) en 2D y 3D para reforzar el enfoque de Análisis Vectorial.
+
+El objetivo principal es facilitar la comprensión visual y numérica de las integrales múltiples, combinando matemáticas, programación y visualización gráfica.
+
+🎯 Objetivos
+
+1. Aplicar conceptos de integrales dobles y triples.
+2. Implementar aproximaciones numéricas mediante particiones.
+3. Visualizar regiones y campos vectoriales en 2D y 3D.
+4. Relacionar el cálculo matemático con herramientas computacionales.
+5. Presentar un proyecto claro, didáctico y visualmente profesional.
+
+🧠 Fundamento matemático
+Integral doble
+
+Se calcula la integral de la función:
+
+𝑓 (𝑥 , 𝑦) = 𝑥^2 + 𝑦^2
+
+en la región cuadrada:
+
+𝑅 = {−1 ≤ 𝑥 ≤ 1 ,  −1 ≤ 𝑦 ≤ 1}
+
+Valor teórico:
+
+∬ 𝑅 (𝑥^2 + 𝑦^2)𝑑𝐴 = 8/3∬R
+	​
+Integral triple
+
+Se calcula la integral de la función:
+
+𝑓
+(
+𝑥
+,
+𝑦
+,
+𝑧
+)
+=
+𝑥
+2
++
+𝑦
+2
++
+𝑧
+2
+f(x,y,z)=x
+2
++y
+2
++z
+2
+
+en el volumen:
+
+𝑉
+=
+{
+−
+1
+≤
+𝑥
+,
+𝑦
+,
+𝑧
+≤
+1
+}
+V={−1≤x,y,z≤1}
+
+Valor teórico:
+
+∭
+𝑉
+(
+𝑥
+2
++
+𝑦
+2
++
+𝑧
+2
+)
+ 
+𝑑
+𝑉
+=
+8
+∭
+V
+	​
+
+(x
+2
++y
+2
++z
+2
+)dV=8
+🖥️ Tecnologías utilizadas
+
+HTML5 – Estructura del proyecto
+
+CSS3 – Diseño visual moderno y profesional
+
+JavaScript – Lógica matemática y cálculos numéricos
+
+Plotly.js – Gráficas 2D, 3D y visualización de vectores
+
+📊 Funcionalidades principales
+
+Selección entre integral doble o integral triple
+
+Configuración del número de particiones
+
+Cálculo automático de:
+
+Valor aproximado
+
+Valor teórico
+
+Error relativo
+
+Visualización gráfica de:
+
+Región de integración
+
+Vectores representados con flechas
+
+Despliegue de la fórmula matemática utilizada
+
+🧭 Visualización vectorial
+
+En 2D se muestran vectores en el plano que representan la dirección del campo.
+
+En 3D se utilizan flechas espaciales (cone) para mostrar vectores en el volumen.
+
+Esto refuerza la relación entre integrales múltiples y análisis vectorial.
+
+▶️ Cómo ejecutar el proyecto
+
+Copia el archivo HTML del proyecto.
+
+Ábrelo con cualquier navegador moderno (Chrome, Edge, Firefox).
+
+Selecciona el tipo de integral.
+
+Ajusta el número de particiones.
+
+Presiona “Calcular integral”.
+
+No requiere instalación ni compilación adicional.
+
+📁 Estructura del proyecto
+/integrales-vectoriales
+│
+├── index.html   ← Código completo del proyecto
+└── README.md    ← Documentación del proyecto
+
+🧪 Resultados esperados
+
+A mayor número de particiones, menor error relativo.
+
+Correspondencia clara entre:
+
+Resultado numérico
+
+Fórmula teórica
+
+Representación gráfica
+
+👨‍🎓 Autor
+
+Proyecto académico desarrollado con fines educativos para la materia de Análisis Vectorial.
+
+📝 Comentario final
+
+Este proyecto demuestra cómo la programación puede utilizarse como una herramienta poderosa para visualizar y comprender conceptos matemáticos avanzados, integrando cálculo, vectores y tecnología en una sola aplicación interactiva.
