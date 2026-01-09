@@ -5,7 +5,6 @@
   <title>Calculadora de Analisis Vectorial Pro</title>
   
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js" type="text/javascript"></script>
 
   <style>
@@ -18,9 +17,7 @@
     }
     h1 { text-align: center; font-weight: 300; letter-spacing: 2px; margin-bottom: 10px; color: #fff; }
     p.subtitle { text-align: center; opacity: 0.7; margin-bottom: 40px; }
-    
     .container { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 1200px; margin: 0 auto; }
-    
     .panel {
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px);
@@ -31,11 +28,8 @@
       box-shadow: 0 20px 50px rgba(0,0,0,0.5);
       border: 1px solid rgba(255,255,255,0.1);
     }
-
     h3 { margin-top: 0; color: #00c6ff; font-weight: 400; display: flex; align-items: center; gap: 10px; }
-    
     label { display: block; margin-top: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
-    
     select, input {
       width: 100%;
       padding: 12px;
@@ -47,7 +41,6 @@
       box-sizing: border-box;
       outline: none;
     }
-
     button {
       width: 100%;
       margin-top: 25px;
@@ -63,12 +56,7 @@
       transition: all 0.3s ease;
     }
     button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 114, 255, 0.5); }
-
-    .wolfram-btn {
-      background: linear-gradient(45deg, #ff4b2b, #ff416c);
-      margin-top: 10px;
-    }
-
+    .wolfram-btn { background: linear-gradient(45deg, #ff4b2b, #ff416c); margin-top: 10px; }
     .result-item {
       background: rgba(255,255,255,0.03);
       padding: 15px;
@@ -76,7 +64,6 @@
       border-radius: 12px;
       border-left: 5px solid #00c6ff;
     }
-    
     .formula-box {
       font-family: 'Consolas', monospace;
       font-size: 0.9rem;
@@ -86,10 +73,8 @@
       padding: 15px;
       border-radius: 10px;
     }
-
     #graph { width: 100%; height: 500px; }
     .highlight { color: #4ade80; font-weight: 600; font-size: 1.1rem; }
-    
     #customFuncContainer { display: none; margin-top: 10px; }
     .help-text {
       font-size: 0.75rem;
@@ -105,7 +90,7 @@
 </head>
 <body>
 
-<h1>Calculadora de Integrales Vectoriales</h1>
+<h1>Calculadora de Analisis Vectorial</h1>
 <p class="subtitle">Aproximacion Numerica vs Valor Teorico (Visualizacion de Campos)</p>
 
 <div class="container">
@@ -123,6 +108,11 @@
     <div id="customFuncContainer">
       <label>Define tu funcion</label>
       <input type="text" id="customFuncInput" value="x^2 + y^2 + z^2">
+      <div class="help-text">
+        <b>Sintaxis:</b> Multiplicacion (*), Potencia (^), Raiz (sqrt), <br>
+        Trigonometria (sin, cos, tan), pi, e. <br>
+        <b>Variables:</b> Usa <b>x, y, z</b> unicamente.
+      </div>
     </div>
 
     <label>Region de Integracion</label>
@@ -135,7 +125,7 @@
     </select>
 
     <label>Resolucion de Malla (Particiones)</label>
-    <input type="number" id="n" value="20" min="5" max="50">
+    <input type="number" id="n" value="0" min="0" max="50">
 
     <button onclick="ejecutar()">Generar e Integrar</button>
     <button class="wolfram-btn" onclick="consultarWolfram()">Analizar en Wolfram|Alpha</button>
@@ -150,7 +140,6 @@
 </div>
 
 <script>
-// Verificación de carga
 function checkMathLib() {
     return (typeof math !== 'undefined' || typeof window.math !== 'undefined');
 }
@@ -158,7 +147,6 @@ function checkMathLib() {
 function toggleCustomFunc() {
     const isCustom = document.getElementById("funcId").value === 'custom';
     document.getElementById("customFuncContainer").style.display = isCustom ? 'block' : 'none';
-    // Limpiamos el resultado al cambiar de función para evitar confusiones
     document.getElementById("resultado").innerHTML = "";
 }
 
@@ -169,7 +157,6 @@ const funciones = {
 };
 
 function getExacto(sistema, funcId) {
-    // Solo tenemos valores teóricos exactos para la función f1 (cuadrática)
     if (funcId !== 'f1') return null;
     const exactos = {
         'rect': 8/3, 'disco': Math.PI/2, 'caja': 8.0, 'esfera': (4/5) * Math.PI, 'cilindro': 3 * Math.PI
@@ -178,40 +165,41 @@ function getExacto(sistema, funcId) {
 }
 
 function ejecutar() {
-    // Limpiar pantalla de resultados previos
-    document.getElementById("resultado").innerHTML = "<p style='color:#00c6ff'>Calculando...</p>";
+    const n = parseInt(document.getElementById("n").value);
+    const resDiv = document.getElementById("resultado");
+
+    if (isNaN(n) || n <= 0) {
+        alert("Ingresa una resolucion mayor a 0.");
+        return;
+    }
+
+    resDiv.innerHTML = "<p style='color:#00c6ff'>Calculando...</p>";
 
     const funcId = document.getElementById("funcId").value;
     const sistema = document.getElementById("sistema").value;
-    const n = parseInt(document.getElementById("n").value);
     
     let f;
     if(funcId === 'custom') {
-        if (!checkMathLib()) {
-            alert("La libreria aún no carga. Asegurate de tener conexion a internet.");
-            return;
-        }
         const formula = document.getElementById("customFuncInput").value.trim() || "1";
         try {
             const m = window.math || math;
             const node = m.parse(formula);
             const code = node.compile();
-            f = (x, y, z = 0) => {
+            f = (xVal, yVal, zVal = 0) => {
                 try {
-                    let result = code.evaluate({x: x, y: y, z: z});
-                    return (typeof result === 'number') ? result : 0;
+                    return code.evaluate({ x: xVal, y: yVal, z: zVal });
                 } catch(e) { return 0; }
             };
         } catch (e) {
             alert("Error en la formula: " + e.message);
-            document.getElementById("resultado").innerHTML = "";
+            resDiv.innerHTML = "";
             return;
         }
     } else {
         f = funciones[funcId];
     }
 
-    let aprox = 0;
+    let sumaAcumulada = 0;
     let vData = { x: [], y: [], z: [], u: [], v: [], w: [] };
     const step = Math.max(1, Math.floor(n/10));
 
@@ -227,21 +215,22 @@ function ejecutar() {
                     if (sistema === "rect") { x = r; y = t; J = 1; }
                     else { x = r * Math.cos(t); y = r * Math.sin(t); J = r; }
                     
-                    const val = f(x, y, 0);
-                    aprox += val * J;
+                    const fVal = f(x, y, 0);
+                    sumaAcumulada += (fVal * J);
                     
                     if (i % step === 0 && j % step === 0) {
                         vData.x.push(x); vData.y.push(y); vData.z.push(0);
-                        vData.u.push(x * 0.1); vData.v.push(y * 0.1); vData.w.push(val * 0.1);
+                        vData.u.push(x * 0.1); vData.v.push(y * 0.1); vData.w.push(fVal * 0.1);
                     }
                 }
             }
-            aprox *= (dr * dt);
+            sumaAcumulada *= (dr * dt);
         } else {
             let dr, dt, dp;
             if (sistema === "caja") { dr=2/n; dt=2/n; dp=2/n; }
             else if (sistema === "esfera") { dr=1/n; dt=2*Math.PI/n; dp=Math.PI/n; }
             else if (sistema === "cilindro") { dr=1/n; dt=2*Math.PI/n; dp=2/n; }
+            
             for(let i=0; i<n; i++) {
                 for(let j=0; j<n; j++) {
                     for(let k=0; k<n; k++) {
@@ -249,31 +238,36 @@ function ejecutar() {
                         const t = (j+0.5)*dt;
                         const p = (sistema === "cilindro" ? -1 : 0) + (k+0.5)*dp;
                         let x, y, z, J;
-                        if(sistema === "caja") { x=r; y=t-1; z=p; J=1; }
-                        else if(sistema === "esfera") {
-                            x = r*Math.sin(p)*Math.cos(t); y=r*Math.sin(p)*Math.sin(t); z=r*Math.cos(p);
-                            J = r*r*Math.sin(p);
-                        }
-                        else { x = r*Math.cos(t); y=r*Math.sin(t); z=p; J=r; }
                         
-                        const val = f(x, y, z);
-                        aprox += val * J;
+                        if(sistema === "caja") { 
+                            x = r; y = (j+0.5)*dt - 1; z = p; J = 1; 
+                        } else if(sistema === "esfera") {
+                            x = r*Math.sin(p)*Math.cos(t); 
+                            y = r*Math.sin(p)*Math.sin(t); 
+                            z = r*Math.cos(p);
+                            J = r*r*Math.sin(p);
+                        } else { 
+                            x = r*Math.cos(t); y = r*Math.sin(t); z = p; J = r; 
+                        }
+                        
+                        const fVal = f(x, y, z);
+                        sumaAcumulada += (fVal * J);
                         
                         if(i % (step*2) === 0 && j % (step*2) === 0 && k % (step*2) === 0) {
                             vData.x.push(x); vData.y.push(y); vData.z.push(z);
-                            vData.u.push(x*0.1); vData.v.push(y*0.1); vData.w.push(val*0.1);
+                            vData.u.push(x*0.1); vData.v.push(y*0.1); vData.w.push(fVal*0.1);
                         }
                     }
                 }
             }
-            aprox *= (dr * dt * dp);
+            sumaAcumulada *= (dr * dt * dp);
         }
 
-        mostrarResultados(aprox, getExacto(sistema, funcId), sistema);
+        mostrarResultados(sumaAcumulada, getExacto(sistema, funcId), sistema);
         plotVectorField(vData);
 
     } catch (err) {
-        alert("Error durante el calculo: " + err.message);
+        alert("Error: " + err.message);
     }
 }
 
@@ -295,54 +289,19 @@ function mostrarResultados(aprox, exacto, sistema) {
     let errorHTML = "";
     if (exacto !== null) {
         const errorRel = (Math.abs(aprox - exacto) / exacto * 100).toFixed(4);
-        errorHTML = `
-            <div class="result-item">Valor Teorico: <span class="highlight">${exacto.toFixed(4)}</span></div>
-            <div class="result-item">Error Relativo: <span class="highlight">${errorRel}%</span></div>
-        `;
+        errorHTML = `<div class="result-item">Valor Teorico: <span class="highlight">${exacto.toFixed(4)}</span></div><div class="result-item">Error Relativo: <span class="highlight">${errorRel}%</span></div>`;
     } else {
         errorHTML = `<div class="result-item" style="opacity:0.6; font-size:0.8rem;">* Valor teorico no disponible para funciones personalizadas.</div>`;
     }
-
-    const formulas = { 
-        rect: "dx dy", 
-        disco: "r dr d?", 
-        esfera: "?² sin(f) d? d? df", 
-        cilindro: "r dz dr d?", 
-        caja: "dx dy dz" 
-    };
-
-    document.getElementById("resultado").innerHTML = `
-        <div class="result-item">Aproximacion Numerica: <span class="highlight">${aprox.toFixed(6)}</span></div>
-        ${errorHTML}
-        <div class="formula-box"><strong>Diferencial:</strong> dV = ${formulas[sistema]}</div>
-    `;
+    const formulas = { rect: "dx dy", disco: "r dr dt", esfera: "r^2 sin(p) dr dt dp", cilindro: "r dz dr dt", caja: "dx dy dz" };
+    document.getElementById("resultado").innerHTML = `<div class="result-item">Aproximacion Numerica: <span class="highlight">${aprox.toFixed(6)}</span></div>${errorHTML}<div class="formula-box"><strong>Diferencial:</strong> dV = ${formulas[sistema]}</div>`;
 }
 
 function plotVectorField(d) {
-    const trace = { 
-        type: 'cone', 
-        x: d.x, y: d.y, z: d.z, 
-        u: d.u, v: d.v, w: d.w, 
-        sizemode: 'scaled', 
-        sizeref: 2, 
-        colorscale: 'Viridis', 
-        showscale: false 
-    };
-    const layout = { 
-        scene: { 
-            xaxis: { title: 'X' }, 
-            yaxis: { title: 'Y' }, 
-            zaxis: { title: 'Z' }, 
-            bgcolor: 'rgba(0,0,0,0)' 
-        }, 
-        margin: { l: 0, r: 0, b: 0, t: 0 }, 
-        paper_bgcolor: 'rgba(0,0,0,0)' 
-    };
+    const trace = { type: 'cone', x: d.x, y: d.y, z: d.z, u: d.u, v: d.v, w: d.w, sizemode: 'scaled', sizeref: 2, colorscale: 'Viridis', showscale: false };
+    const layout = { scene: { xaxis: { title: 'X' }, yaxis: { title: 'Y' }, zaxis: { title: 'Z' }, bgcolor: 'rgba(0,0,0,0)' }, margin: { l: 0, r: 0, b: 0, t: 0 }, paper_bgcolor: 'rgba(0,0,0,0)' };
     Plotly.newPlot("graph", [trace], layout);
 }
-
-// Inicio con retardo
-setTimeout(ejecutar, 1000);
 </script>
 </body>
 </html>
