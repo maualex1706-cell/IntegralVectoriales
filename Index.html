@@ -158,6 +158,8 @@ function checkMathLib() {
 function toggleCustomFunc() {
     const isCustom = document.getElementById("funcId").value === 'custom';
     document.getElementById("customFuncContainer").style.display = isCustom ? 'block' : 'none';
+    // Limpiamos el resultado al cambiar de función para evitar confusiones
+    document.getElementById("resultado").innerHTML = "";
 }
 
 const funciones = {
@@ -167,6 +169,7 @@ const funciones = {
 };
 
 function getExacto(sistema, funcId) {
+    // Solo tenemos valores teóricos exactos para la función f1 (cuadrática)
     if (funcId !== 'f1') return null;
     const exactos = {
         'rect': 8/3, 'disco': Math.PI/2, 'caja': 8.0, 'esfera': (4/5) * Math.PI, 'cilindro': 3 * Math.PI
@@ -175,6 +178,9 @@ function getExacto(sistema, funcId) {
 }
 
 function ejecutar() {
+    // Limpiar pantalla de resultados previos
+    document.getElementById("resultado").innerHTML = "<p style='color:#00c6ff'>Calculando...</p>";
+
     const funcId = document.getElementById("funcId").value;
     const sistema = document.getElementById("sistema").value;
     const n = parseInt(document.getElementById("n").value);
@@ -182,7 +188,7 @@ function ejecutar() {
     let f;
     if(funcId === 'custom') {
         if (!checkMathLib()) {
-            alert("La librería aún no carga. Asegúrate de tener conexión a internet.");
+            alert("La libreria aún no carga. Asegurate de tener conexion a internet.");
             return;
         }
         const formula = document.getElementById("customFuncInput").value.trim() || "1";
@@ -192,11 +198,13 @@ function ejecutar() {
             const code = node.compile();
             f = (x, y, z = 0) => {
                 try {
-                    return code.evaluate({x: x, y: y, z: z});
+                    let result = code.evaluate({x: x, y: y, z: z});
+                    return (typeof result === 'number') ? result : 0;
                 } catch(e) { return 0; }
             };
         } catch (e) {
-            alert("Error en la fórmula: " + e.message);
+            alert("Error en la formula: " + e.message);
+            document.getElementById("resultado").innerHTML = "";
             return;
         }
     } else {
@@ -218,11 +226,13 @@ function ejecutar() {
                     let x, y, J;
                     if (sistema === "rect") { x = r; y = t; J = 1; }
                     else { x = r * Math.cos(t); y = r * Math.sin(t); J = r; }
+                    
                     const val = f(x, y, 0);
                     aprox += val * J;
+                    
                     if (i % step === 0 && j % step === 0) {
                         vData.x.push(x); vData.y.push(y); vData.z.push(0);
-                        vData.u.push(x * 0.2); vData.v.push(y * 0.2); vData.w.push(val * 0.2);
+                        vData.u.push(x * 0.1); vData.v.push(y * 0.1); vData.w.push(val * 0.1);
                     }
                 }
             }
@@ -245,21 +255,25 @@ function ejecutar() {
                             J = r*r*Math.sin(p);
                         }
                         else { x = r*Math.cos(t); y=r*Math.sin(t); z=p; J=r; }
+                        
                         const val = f(x, y, z);
                         aprox += val * J;
+                        
                         if(i % (step*2) === 0 && j % (step*2) === 0 && k % (step*2) === 0) {
                             vData.x.push(x); vData.y.push(y); vData.z.push(z);
-                            vData.u.push(x*0.3); vData.v.push(y*0.3); vData.w.push(z*0.3);
+                            vData.u.push(x*0.1); vData.v.push(y*0.1); vData.w.push(val*0.1);
                         }
                     }
                 }
             }
             aprox *= (dr * dt * dp);
         }
+
         mostrarResultados(aprox, getExacto(sistema, funcId), sistema);
         plotVectorField(vData);
+
     } catch (err) {
-        alert("Error en el cálculo: " + err.message);
+        alert("Error durante el calculo: " + err.message);
     }
 }
 
@@ -278,18 +292,56 @@ function consultarWolfram() {
 }
 
 function mostrarResultados(aprox, exacto, sistema) {
-    let errorHTML = exacto ? `<div class="result-item">Valor Teorico: <span class="highlight">${exacto.toFixed(4)}</span></div><div class="result-item">Error Relativo: <span class="highlight">${(Math.abs(aprox - exacto) / exacto * 100).toFixed(4)}%</span></div>` : "";
-    const formulas = { rect: "dx dy", disco: "r dr d?", esfera: "?² sin(f) d? d? df", cilindro: "r dz dr d?", caja: "dx dy dz" };
-    document.getElementById("resultado").innerHTML = `<div class="result-item">Aproximacion Numerica: <span class="highlight">${aprox.toFixed(6)}</span></div>${errorHTML}<div class="formula-box"><strong>Diferencial:</strong> dV = ${formulas[sistema]}</div>`;
+    let errorHTML = "";
+    if (exacto !== null) {
+        const errorRel = (Math.abs(aprox - exacto) / exacto * 100).toFixed(4);
+        errorHTML = `
+            <div class="result-item">Valor Teorico: <span class="highlight">${exacto.toFixed(4)}</span></div>
+            <div class="result-item">Error Relativo: <span class="highlight">${errorRel}%</span></div>
+        `;
+    } else {
+        errorHTML = `<div class="result-item" style="opacity:0.6; font-size:0.8rem;">* Valor teorico no disponible para funciones personalizadas.</div>`;
+    }
+
+    const formulas = { 
+        rect: "dx dy", 
+        disco: "r dr d?", 
+        esfera: "?² sin(f) d? d? df", 
+        cilindro: "r dz dr d?", 
+        caja: "dx dy dz" 
+    };
+
+    document.getElementById("resultado").innerHTML = `
+        <div class="result-item">Aproximacion Numerica: <span class="highlight">${aprox.toFixed(6)}</span></div>
+        ${errorHTML}
+        <div class="formula-box"><strong>Diferencial:</strong> dV = ${formulas[sistema]}</div>
+    `;
 }
 
 function plotVectorField(d) {
-    const trace = { type: 'cone', x: d.x, y: d.y, z: d.z, u: d.u, v: d.v, w: d.w, sizemode: 'scaled', sizeref: 1.5, colorscale: 'Viridis', showscale: false };
-    const layout = { scene: { xaxis: { title: 'X' }, yaxis: { title: 'Y' }, zaxis: { title: 'Z' }, bgcolor: 'rgba(0,0,0,0)' }, margin: { l: 0, r: 0, b: 0, t: 0 }, paper_bgcolor: 'rgba(0,0,0,0)' };
+    const trace = { 
+        type: 'cone', 
+        x: d.x, y: d.y, z: d.z, 
+        u: d.u, v: d.v, w: d.w, 
+        sizemode: 'scaled', 
+        sizeref: 2, 
+        colorscale: 'Viridis', 
+        showscale: false 
+    };
+    const layout = { 
+        scene: { 
+            xaxis: { title: 'X' }, 
+            yaxis: { title: 'Y' }, 
+            zaxis: { title: 'Z' }, 
+            bgcolor: 'rgba(0,0,0,0)' 
+        }, 
+        margin: { l: 0, r: 0, b: 0, t: 0 }, 
+        paper_bgcolor: 'rgba(0,0,0,0)' 
+    };
     Plotly.newPlot("graph", [trace], layout);
 }
 
-// Inicio con retardo para asegurar carga
+// Inicio con retardo
 setTimeout(ejecutar, 1000);
 </script>
 </body>
